@@ -1,0 +1,49 @@
+#!/bin/busybox sh
+
+/bin/busybox --install -s
+
+error() {
+	echo ''
+	echo '  Error mounting the $1 filesystem.'
+	echo ''
+	echo '  You will be dropped to a rescue shell. Examine'
+	echo '  the output of "dmesg" to see what went wrong.'
+	echo ''
+	echo '  To continue boot, type "exit".'
+	echo ''
+	sh
+}
+
+depmod -a
+modprobe -l | while read line; do modprobe `basename $line ".ko"`; done
+
+mount -t proc none /proc || error proc
+mount -t sysfs none /sys || error sys
+mount -t devtmpfs none /dev || error dev
+
+echo 0 > /proc/sys/kernel/printk
+clear
+
+echo "                          "
+echo "   ___ ___ _ __ ___  ___  "
+echo "  / __/ _ \ '__/ _ \/ __| "
+echo " | (_|  __/ | |  __/\__ \ "
+echo "  \___\___|_|  \___||___/ "
+echo "                          "
+
+mkdir -p /boot && \
+	mount -t ext4 -o rw /dev/sda1 /boot || error boot
+mkdir -p /mnt/squashfs && \
+	mount -t squashfs -o ro /dev/sda2 /mnt/squashfs || error squashfs
+mkdir -p /mnt/persist && \
+	mount -t ext4 -o rw /dev/sda3 /mnt/persist || error persistent
+mkdir -p /mnt/persist/fs /mnt/persist/work /overlay && \
+	mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs,workdir=/mnt/persist/work overlay /overlay || error overlay
+
+umount /proc
+umount /sys
+umount /dev
+
+echo '  Starting up...'
+
+exec switch_root /overlay /sbin/init
