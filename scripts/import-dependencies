@@ -2,13 +2,13 @@
 
 echo "Searching for dependencies for `basename $1`..."
 
-cat ${MODULEPATH}/../modules.dep | grep "`basename $1`: " | awk '{$1= ""; print $0}' | tr ' ' '\n' | grep -v '^$' | while read moddeppath;
+cat ${MODULE_PATH}/../modules.dep | grep "`basename $1`: " | awk '{$1= ""; print $0}' | tr ' ' '\n' | grep -v '^$' | while read moddeppath;
 do
-	[ -d `dirname ${BUILDDIR}/${moddeppath}` ] || mkdir -p `dirname ${BUILDDIR}/${MODULEPATH}/../${moddeppath}`;
-	[ -f ${BUILDDIR}/${MODULEPATH}/../${moddeppath} ] ||
+	[ -d `dirname ${BUILD_DIR}/${moddeppath}` ] || mkdir -p `dirname ${BUILD_DIR}/${MODULE_PATH}/../${moddeppath}`;
+	[ -f ${BUILD_DIR}/${MODULE_PATH}/../${moddeppath} ] ||
 		(
-			cp -a ${MODULEPATH}/../${moddeppath} ${BUILDDIR}/${MODULEPATH}/../${moddeppath};
+			cp -a ${MODULE_PATH}/../${moddeppath} ${BUILD_DIR}/${MODULE_PATH}/../${moddeppath};
 			echo "Imported `basename $1` dependency `basename /${moddeppath}`";
-			MODULEPATH=${MODULEPATH} BUILDDIR=${BUILDDIR} ./scripts/import-dependencies ${moddeppath};
+			MODULE_PATH=${MODULE_PATH} BUILD_DIR=${BUILD_DIR} ./scripts/import-dependencies ${moddeppath};
 		)
 done
