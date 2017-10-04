@@ -2,7 +2,8 @@
 
 TARGET_DIR?=/
 BUILD_DIR?=$(@D)/ceres-init
-OUTPUT_FILE?=$(TARGET_DIR)/boot/ceres-init.cpio.gz
+OUTPUT_DIR?=$(TARGET_DIR)/boot
+OUTPUT_FILE?=ceres-init.cpio.gz
 MODULE_PATH?=$(TARGET_DIR)/lib/modules/$(shell ls $(TARGET_DIR)/lib/modules | tail -1)/kernel
 
 define progress_out
@@ -12,7 +13,7 @@ endef
 all: build
 
 build:
-	$(call progress_out,Building ceres-init $(OUTPUT_FILE))
+	$(call progress_out,Building $(OUTPUT_FILE) in $(BUILD_DIR))
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)/bin $(BUILD_DIR)/dev $(BUILD_DIR)/etc
 	mkdir -p $(BUILD_DIR)/lib64 $(BUILD_DIR)/mnt $(BUILD_DIR)/proc
@@ -34,7 +35,7 @@ build:
 				( \
 					cp -a $${modpath} $(BUILD_DIR)/$${modpath}; \
 					echo "Imported `basename $${modpath}`"; \
-					BUILD_DIR=$(BUILD_DIR) MODULE_PATH=$(MODULE_PATH) ./scripts/import-dependencies $${modpath}; \
+					BUILD_DIR=$(BUILD_DIR) MODULE_PATH=$(MODULE_PATH) $(@D)/scripts/import-dependencies $${modpath}; \
 				) \
 		done; \
 	done
@@ -44,5 +45,8 @@ build:
 	chmod +x $(BUILD_DIR)/bin/busybox
 
 install: build
-	$(call progress_out,Installing initramfs into $(OUTPUT_FILE))
-	cd $(BUILD_DIR) && find . -print0 | cpio --null -ov --format=newc | gzip -9 > $(OUTPUT_FILE)
+	$(call progress_out,Installing $(OUTPUT_FILE) into $(OUTPUT_DIR))
+	if [ ! -d $(OUTPUT_DIR) ]; then \
+		mkdir -p $(OUTPUT_DIR); \
+	fi
+	cd $(BUILD_DIR) && find . -print0 | cpio --null -ov --format=newc | gzip -9 > $(OUTPUT_DIR)/$(OUTPUT_FILE)
