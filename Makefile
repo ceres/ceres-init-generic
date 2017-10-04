@@ -40,7 +40,7 @@ build:
 		done; \
 	done
 
-	cp src/init $(BUILD_DIR)/init
+	cp $(@D)/src/init $(BUILD_DIR)/init
 	chmod +x $(BUILD_DIR)/init
 	chmod +x $(BUILD_DIR)/bin/busybox
 
