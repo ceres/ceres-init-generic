@@ -25,13 +25,13 @@ build:
 
 	chmod +x $(BUILD_DIR)/init
 	chmod +x $(BUILD_DIR)/bin/busybox
-	fakeroot chown root:root $(BUILD_DIR)/bin/busybox
+	sudo chown root:root $(BUILD_DIR)/bin/busybox
 
-	fakeroot mknod $(BUILD_DIR)/dev/console c 5 1 || true
-	fakeroot mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
-	fakeroot mknod $(BUILD_DIR)/dev/null c 1 3 || true
-	fakeroot mknod $(BUILD_DIR)/dev/tty1 c 4 1 || true
-	fakeroot mknod $(BUILD_DIR)/dev/tty2 c 4 2 || true
+	sudo mknod $(BUILD_DIR)/dev/console c 5 1 || true
+	sudo mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
+	sudo mknod $(BUILD_DIR)/dev/null c 1 3 || true
+	sudo mknod $(BUILD_DIR)/dev/tty1 c 4 1 || true
+	sudo mknod $(BUILD_DIR)/dev/tty2 c 4 2 || true
 
 	cat modules-generic | while read mod; do \
 		find ${MODULE_PATH} -name $${mod}.ko | while read modpath; do \
