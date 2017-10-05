@@ -27,7 +27,7 @@ build:
 	sudo mknod $(BUILD_DIR)/dev/tty2 c 4 2 || true
 
 	cp -a $(TARGET_DIR)/bin/busybox $(BUILD_DIR)/bin/
-	cp -a $(TARGET_DIR)/lib/*.so $(BUILD_DIR)/lib/
+	cp -a $(TARGET_DIR)/lib/*.so* $(BUILD_DIR)/lib/
 
 	cat modules-generic | while read mod; do \
 		find ${MODULE_PATH} -name $${mod}.ko | while read modpath; do \
