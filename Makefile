@@ -20,11 +20,11 @@ build:
 	mkdir -p $(BUILD_DIR)/root $(BUILD_DIR)/sbin $(BUILD_DIR)/sys
 	mkdir -p $(BUILD_DIR)/usr/bin $(BUILD_DIR)/usr/sbin $(BUILD_DIR)/lib
 
-	mknod $(BUILD_DIR)/dev/console c 5 1 || true
-	mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
-	mknod $(BUILD_DIR)/dev/null c 1 3 || true
-	mknod $(BUILD_DIR)/dev/tty1 c 4 1 || true
-	mknod $(BUILD_DIR)/dev/tty2 c 4 2 || true
+	sudo mknod $(BUILD_DIR)/dev/console c 5 1 || true
+	sudo mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
+	sudo mknod $(BUILD_DIR)/dev/null c 1 3 || true
+	sudo mknod $(BUILD_DIR)/dev/tty1 c 4 1 || true
+	sudo mknod $(BUILD_DIR)/dev/tty2 c 4 2 || true
 
 	cp -a $(TARGET_DIR)/bin/busybox $(BUILD_DIR)/bin/
 
