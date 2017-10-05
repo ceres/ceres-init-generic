@@ -14,8 +14,11 @@ error() {
 	sh
 }
 
-depmod -a
-modprobe -l | while read line; do modprobe `basename $line ".ko"`; done
+if [ -d /lib/modules/`uname -r` ];
+then
+	depmod -a
+	modprobe -l | while read line; do modprobe `basename $line ".ko"`; done
+fi
 
 mount -t proc none /proc || error proc
 mount -t sysfs none /sys || error sys
