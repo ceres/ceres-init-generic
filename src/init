@@ -30,6 +30,8 @@ echo "  / __/ _ \ '__/ _ \/ __| "
 echo " | (_|  __/ | |  __/\__ \ "
 echo "  \___\___|_|  \___||___/ "
 echo "                          "
+echo "      ceres.github.io     "
+echo "                          "
 
 mkdir -p /boot && \
 	mount -t ext4 -o rw /dev/sda1 /boot || error boot
@@ -40,11 +42,11 @@ mkdir -p /mnt/persist && \
 mkdir -p /mnt/persist/fs /mnt/persist/work /overlay && \
 	mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs,workdir=/mnt/persist/work overlay /overlay || error overlay
 
-#umount /proc
-#umount /sys
-#umount /dev
+umount /proc
+umount /sys
+umount /dev
 
-echo '  Starting up...'
-echo ''
+ls /
+ls /dev
 
 exec switch_root /overlay /sbin/init
