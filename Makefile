@@ -20,14 +20,19 @@ build:
 	mkdir -p $(BUILD_DIR)/root $(BUILD_DIR)/sbin $(BUILD_DIR)/sys
 	mkdir -p $(BUILD_DIR)/usr/bin $(BUILD_DIR)/usr/sbin $(BUILD_DIR)/lib
 
-	sudo mknod $(BUILD_DIR)/dev/console c 5 1 || true
-	sudo mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
-	sudo mknod $(BUILD_DIR)/dev/null c 1 3 || true
-	sudo mknod $(BUILD_DIR)/dev/tty1 c 4 1 || true
-	sudo mknod $(BUILD_DIR)/dev/tty2 c 4 2 || true
-
 	cp -a $(TARGET_DIR)/bin/busybox $(BUILD_DIR)/bin/
-#	cp -a $(TARGET_DIR)/lib/*.so* $(BUILD_DIR)/lib/
+	cp $(@D)/src/init $(BUILD_DIR)/init
+
+	chmod +x $(BUILD_DIR)/init
+	chmod +x $(BUILD_DIR)/bin/busybox
+
+	fakeroot chown -R root:root $(BUILD_DIR)
+
+	fakeroot mknod $(BUILD_DIR)/dev/console c 5 1 || true
+	fakeroot mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
+	fakeroot mknod $(BUILD_DIR)/dev/null c 1 3 || true
+	fakeroot mknod $(BUILD_DIR)/dev/tty1 c 4 1 || true
+	fakeroot mknod $(BUILD_DIR)/dev/tty2 c 4 2 || true
 
 	cat modules-generic | while read mod; do \
 		find ${MODULE_PATH} -name $${mod}.ko | while read modpath; do \
@@ -40,10 +45,6 @@ build:
 				) \
 		done; \
 	done
-
-	cp $(@D)/src/init $(BUILD_DIR)/init
-	chmod +x $(BUILD_DIR)/init
-	chmod +x $(BUILD_DIR)/bin/busybox
 
 install: build
 	$(call progress_out,Installing $(OUTPUT_FILE) into $(OUTPUT_DIR))
