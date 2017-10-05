@@ -46,7 +46,6 @@ umount /proc
 umount /sys
 umount /dev
 
-ls /
-ls /dev
+ls -lart /dev
 
 exec switch_root /overlay /sbin/init
