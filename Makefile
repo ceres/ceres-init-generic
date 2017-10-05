@@ -25,7 +25,7 @@ build:
 
 	chmod +x $(BUILD_DIR)/init
 	chmod +x $(BUILD_DIR)/bin/busybox
-	sudo chown root:root $(BUILD_DIR)/bin/busybox
+	sudo chown root $(BUILD_DIR)/bin/busybox
 
 	sudo mknod $(BUILD_DIR)/dev/console c 5 1 || true
 	sudo mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
