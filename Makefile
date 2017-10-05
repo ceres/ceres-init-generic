@@ -25,8 +25,7 @@ build:
 
 	chmod +x $(BUILD_DIR)/init
 	chmod +x $(BUILD_DIR)/bin/busybox
-
-	fakeroot chown -R root:root $(BUILD_DIR)
+	fakeroot chown root:root $(BUILD_DIR)/bin/busybox
 
 	fakeroot mknod $(BUILD_DIR)/dev/console c 5 1 || true
 	fakeroot mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
