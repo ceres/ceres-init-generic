@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BUILDDIR?=/tmp/ceres-init-build
+BUILDDIR?=/tmp/ceres-init-generic-build
 OUTPUTFILE?=/tmp/ceres-init.cpio.gz
 MODULEPATH?=/lib/modules/$(shell ls /lib/modules | tail -1)/kernel
 
