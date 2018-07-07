@@ -49,4 +49,5 @@ umount /proc
 umount /sys
 umount /dev
 
+# TODO: namespaces?
 exec switch_root /overlay /sbin/init
