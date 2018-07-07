@@ -24,7 +24,7 @@ build:
 	cp -La $(TARGET_DIR)/usr/bin/unshare $(BUILD_DIR)/usr/bin/
 	cp -La $(TARGET_DIR)/usr/bin/nsenter $(BUILD_DIR)/usr/bin/
 	cp -ar $(TARGET_DIR)/lib/libc.so $(BUILD_DIR)/lib/
-	cp -ar $(TARGET_DIR)/lib/*musl*.so $(BUILD_DIR)/lib/
+	cp -ar $(TARGET_DIR)/lib/*musl*.so* $(BUILD_DIR)/lib/
 	cp $(@D)/src/init $(BUILD_DIR)/init
 
 	chmod +x $(BUILD_DIR)/init
