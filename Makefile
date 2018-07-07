@@ -21,8 +21,8 @@ build:
 	mkdir -p $(BUILD_DIR)/usr/bin $(BUILD_DIR)/usr/sbin $(BUILD_DIR)/lib
 
 	cp -a $(TARGET_DIR)/bin/busybox $(BUILD_DIR)/bin/
-	cp -a $(TARGET_DIR)/usr/bin/unshare $(BUILD_DIR)/usr/bin/
-	cp -a $(TARGET_DIR)/usr/bin/nsenter $(BUILD_DIR)/usr/bin/
+	cp -La $(TARGET_DIR)/usr/bin/unshare $(BUILD_DIR)/usr/bin/
+	cp -La $(TARGET_DIR)/usr/bin/nsenter $(BUILD_DIR)/usr/bin/
 	cp $(@D)/src/init $(BUILD_DIR)/init
 
 	chmod +x $(BUILD_DIR)/init
