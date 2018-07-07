@@ -50,4 +50,4 @@ umount /sys
 umount /dev
 
 # TODO: namespaces?
-exec switch_root /overlay unshare -Cuinpfm --mount-proc /sbin/init
+exec switch_root /overlay /usr/bin/unshare -Cuinpfm --mount-proc /sbin/init
