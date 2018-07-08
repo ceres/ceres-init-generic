@@ -49,24 +49,43 @@ mkdir -p /mnt/persist/fs_3
 
 for container in /mnt/persist/fs*;
 do
-	export CON=$(echo ${container} | grep -Eo '[0-9]+$')
-	export CONTTY=$((${CON}+1))
-	
+	CON=$(echo ${container} | grep -Eo '[0-9]+$')
+	CONTTY=$((${CON}+1))
+
 	mkdir -p /mnt/persist/work_${CON}
 	mkdir -p /mnt/overlay/container_${CON}
-	
+
 	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs_${CON},workdir=/mnt/persist/work_${CON} /mnt/overlay/container_${CON} || error overlay
-	
+
 	echo "Starting container ${CON} on tty${CONTTY}..."
-	
+
 	mkdir -p /mnt/overlay/container_${CON}/proc
 	mkdir -p /mnt/overlay/container_${CON}/sys
 	mkdir -p /mnt/overlay/container_${CON}/dev
 
-	cp /cinit /mnt/overlay/container_${CON}/cinit
-	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm /cinit > /dev/tty${CONTTY}; \
-		echo "Started container ${CON}" || \
-		echo "Error starting containing ${CON}"; sh &
+	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
+
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm CON=${CON} CONTTY=${CONTTY} sh -c '
+
+		echo "Installing busybox"
+		/bin/busybox --install -s || error busybox
+
+		echo "Mounting proc and sysfs"
+		mount -t proc none /proc || error proc
+		mount -t sysfs none /sys || error sys
+
+		echo "Starting init.d tasks"
+		/etc/init.d/rcS || error init.d
+
+		echo "Setting hostname to ceres-c${CON}"
+		hostname ceres-c${CON} || error hostname
+
+		echo "Starting getty on tty${CONTTY}"
+		getty -L 0 tty${CONTTY} || error getty
+
+	' > /dev/tty${CONTTY}; \
+	echo "Started container ${CON}" || \
+	echo "Error starting containing ${CON}"; sh &
 done
 
 hostname ceres-control
