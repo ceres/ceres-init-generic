@@ -43,6 +43,11 @@ mkdir -p /mnt/squashfs && \
 mkdir -p /mnt/persist && \
 	mount -t ext4 -o rw /dev/sda3 /mnt/persist || error persistent
 
+mkdir -p /mnt/overlay/control &&
+	mkdir -p /mnt/persist/fs_control && \
+	mkdir -p /mnt/persist/work_control && \
+	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs_control,workdir=/mnt/persist/work_control /mnt/overlay/control || error overlay
+
 mkdir -p /mnt/persist/fs_1
 mkdir -p /mnt/persist/fs_2
 mkdir -p /mnt/persist/fs_3
@@ -77,4 +82,4 @@ echo ""
 echo "Welcome to the ceres-control console."
 
 hostname ceres-control
-exec switch_root /mnt/squashfs /init
+exec switch_root /mnt/overlay/control /init
