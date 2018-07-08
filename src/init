@@ -73,12 +73,12 @@ do
 	cp /cinit /mnt/overlay/container${CON}/init
 	mkdir -p /var/namespaces
 	/bin/busybox chroot /mnt/overlay/container${CON} /usr/bin/unshare \
-		-C=/var/namespaces/${CON}.cgr \
-		-u=/var/namespaces/${CON}.uts \
-		-i=/var/namespaces/${CON}.ipc \
-		-n=/var/namespaces/${CON}.net \
-		-p=/var/namespaces/${CON}.pid \
-		-m=/var/namespaces/${CON}.mnt \
+		--cgroup=/var/namespaces/${CON}.cgr \
+		--uts=/var/namespaces/${CON}.uts \
+		--ipc=/var/namespaces/${CON}.ipc \
+		--net=/var/namespaces/${CON}.net \
+		--pid=/var/namespaces/${CON}.pid \
+		--mount=/var/namespaces/${CON}.mnt \
 		-f /init > /dev/tty${CONTTY} &
 done
 
