@@ -60,7 +60,7 @@ do
 	mkdir -p /mnt/persist/work_${CON}
 	mkdir -p /mnt/overlay/container_${CON}
 
-	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs_${CON},workdir=/mnt/persist/work_${CON} /mnt/overlay/container_${CON} || error overlay
+	mount -t overlay overlay -o lowerdir=/mnt/overlay/control,upperdir=/mnt/persist/fs_${CON},workdir=/mnt/persist/work_${CON} /mnt/overlay/container_${CON} || error overlay
 
 	echo "Starting container ${CON}, press Alt-F${CONTTY} to access"
 
@@ -82,4 +82,4 @@ echo ""
 echo "Welcome to the ceres-control console."
 
 hostname ceres-control
-exec switch_root /mnt/overlay/control /init
+exec switch_root /mnt/overlay/control sh -c 'while true; do getty -L 0 console; done'
