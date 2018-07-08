@@ -58,7 +58,7 @@ do
 	export CONTTY=$((${CON}+1))
 
 	mkdir -p /mnt/persist/work_container${CON}
-	mkdir -p /mnt/overlay/container_${CON}
+	mkdir -p /mnt/overlay/container${CON}
 
 	mount -t overlay overlay -o lowerdir=/mnt/overlay/control,upperdir=/mnt/persist/fs_container${CON},workdir=/mnt/persist/work_container${CON} /mnt/overlay/container${CON} || error overlay
 
