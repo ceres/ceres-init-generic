@@ -13,4 +13,4 @@ echo "Setting hostname to ceres-c${CON}"
 hostname ceres-c${CON}
 
 echo "Starting getty on tty${CONTTY}"
-exec getty -L 0 tty${CONTTY} &
+exec getty -L 0 tty${CONTTY}
