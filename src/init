@@ -49,5 +49,7 @@ umount /proc
 umount /sys
 umount /dev
 
-# TODO: namespaces?
-exec switch_root /overlay /usr/bin/unshare -Cuinpfm /sbin/init
+exec switch_root /overlay /usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty2 &
+exec switch_root /overlay /usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty3
+
+echo "    Instances started    "
