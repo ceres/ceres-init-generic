@@ -73,17 +73,10 @@ do
 		mount -t sysfs none /sys || error sys
 
 		echo "Starting init.d tasks"
-		/etc/init.d/rcS || error init.d
+		#/etc/init.d/rcS || error init.d
 
 		echo "Setting hostname to ceres-c${CON}"
 		hostname ceres-c${CON} || error hostname
-		
-		echo "Debug output"
-		ls /bin | less
-		ls /sbin | less
-		ls /dev | less
-		echo $PATH
-		mount
 
 		echo "Starting getty on tty${CONTTY}"
 		getty -L 0 tty${CONTTY} &
