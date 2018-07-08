@@ -42,8 +42,8 @@ mkdir -p /mnt/squashfs && \
 	mount -t squashfs -o ro /dev/sda2 /mnt/squashfs || error squashfs
 mkdir -p /mnt/persist && \
 	mount -t ext4 -o rw /dev/sda3 /mnt/persist || error persistent
-mkdir -p /overlay
 
+mkdir -p /overlay
 mkdir -p /mnt/persist/container_1
 mkdir -p /mnt/persist/container_2
 mkdir -p /mnt/persist/container_3
@@ -55,14 +55,14 @@ do
 	mkdir -p ${container}_fs ${container}_work ${container}_overlay && \
 		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=${container}_fs,workdir=${container}_work overlay ${container}_overlay || error overlay
 	echo "Starting container ${CON} on tty${TTY}..."
-	/usr/bin/unshare -Cuinpfm \
-		/bin/busybox switch_root ${container}_overlay /etc/init.d/rcS; \
-		hostname ceres-c${CON}; \
-		/bin/busybox getty -L 0 tty${TTY}; \
-	> /dev/tty${TTY}; \
+	/bin/busybox chroot ${container}_overlay /usr/bin/unshare -Cuinpfm (
+		/etc/init.d/rcS;
+		hostname ceres-c${CON};
+		getty -L 0 tty${TTY};
+	) > /dev/tty${TTY}; \
 	echo "Started container ${CON}" || \
 	echo "Error starting containing ${CON}"; sh &
 done
 
-/bin/busybox hostname ceres-control
-/bin/busybox getty -L 0 console
+hostname ceres-control
+getty -L 0 console || sh
