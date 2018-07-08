@@ -63,18 +63,24 @@ do
 	mkdir -p /mnt/overlay/container_${CON}/sys
 	mkdir -p /mnt/overlay/container_${CON}/dev
 	
-	mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
+	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 	
 	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 	
+		echo "Installing busybox"
 		/bin/busybox --install -s
 		
+		echo "Mounting proc and sysfs"
 		mount -t proc none /proc || error proc
 		mount -t sysfs none /sys || error sys
 		
-		# /etc/init.d/rcS
+		echo "Starting init.d tasks"
+		/etc/init.d/rcS
+		
+		echo "Setting hostname to ceres-c{$CON}"
 		hostname ceres-c${CON}
 		
+		echo "Starting getty on tty${TTY}"
 		getty -L 0 tty${TTY}
 		
 	' > /dev/tty${TTY}; \
