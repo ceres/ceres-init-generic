@@ -71,15 +71,14 @@ do
 	# mount -o bind /dev /mnt/overlay/container${CON}/dev || error dev
 
 	cp /cinit /mnt/overlay/container${CON}/init
-	mkdir -p /var/namespaces
+	mkdir -p /var/namespaces/${CON}
 	/bin/busybox chroot /mnt/overlay/container${CON} /usr/bin/unshare \
-		--cgroup=/var/namespaces/${CON}.cgr \
-		--uts=/var/namespaces/${CON}.uts \
-		--ipc=/var/namespaces/${CON}.ipc \
-		--net=/var/namespaces/${CON}.net \
-		--pid=/var/namespaces/${CON}.pid \
-		--mount=/var/namespaces/${CON}.mnt \
-		-f /init > /dev/tty${CONTTY} &
+		--cgroup=/var/namespaces/${CON}/cgr \
+		--uts=/var/namespaces/${CON}/uts \
+		--ipc=/var/namespaces/${CON}/ipc \
+		--net=/var/namespaces/${CON}/net \
+		--pid=/var/namespaces/${CON}/pid \
+		--mount -f /init > /dev/tty${CONTTY} &
 done
 
 umount /proc
