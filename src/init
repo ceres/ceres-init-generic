@@ -76,4 +76,4 @@ umount /sys
 umount /dev
 
 hostname ceres-control
-exec switch_root /mnt/squashfs sh
+exec switch_root /mnt/squashfs /bin/busybox sh
