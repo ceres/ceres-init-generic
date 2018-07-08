@@ -53,9 +53,9 @@ do
 	TTY=$((${CON}+1))
 	mkdir -p ${container}_fs ${container}_work ${container}_overlay && \
 		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=${container}_fs,workdir=${container}_work overlay ${container}_overlay || error overlay
-	echo "Starting container {$CON} on tty${TTY}..."
-	/usr/bin/unshare -Cuinpfm /bin/busybox switch_root ${container}_overlay /sbin/init > /dev/tty${TTY}
-	echo "Started container {$CON}"
+	echo "Starting container ${CON} on tty${TTY}..."
+	/usr/bin/unshare -Cuinpfm /bin/busybox switch_root ${container}_overlay /sbin/init > /dev/tty${TTY} &
+	echo "Started container ${CON}"
 done
 
 exec switch_root /overlay /sbin/getty 0 console
