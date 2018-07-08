@@ -74,7 +74,6 @@ do
 	/bin/busybox chroot /mnt/overlay/container${CON} /usr/bin/unshare -Cuinpfm /init > /dev/tty${CONTTY} &
 done
 
-umount /dev
 umount /proc
 umount /sys
 
@@ -82,4 +81,8 @@ echo ""
 echo "Welcome to the ceres-control console."
 
 hostname ceres-control
-exec switch_root /mnt/overlay/control sh -c 'while true; do getty -L 0 console; done'
+exec switch_root /mnt/overlay/control /bin/busybox sh -c '
+	mount -t proc none /proc
+	mount -t sysfs none /sys
+	while true; do getty -L 0 console; done
+'
