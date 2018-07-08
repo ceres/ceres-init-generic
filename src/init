@@ -66,7 +66,7 @@ do
 	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 
 	cp /cinit /mnt/overlay/container_${CON}/init
-	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm exec /init > /dev/tty${CONTTY}; \
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '/init' > /dev/tty${CONTTY}; \
 		echo "Started container ${CON}" || \
 		echo "Error starting containing ${CON}"; sh &
 done
