@@ -68,7 +68,7 @@ do
 	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 
 		echo "Installing busybox"
-		/bin/busybox --install -s || error busybox
+		/bin/busybox --install -s
 
 		echo "Mounting proc and sysfs"
 		mount -t proc none /proc || error proc
@@ -81,7 +81,7 @@ do
 		hostname ceres-c${CON} || error hostname
 
 		echo "Starting getty on tty${CONTTY}"
-		getty -L 0 tty${CONTTY} || error getty
+		getty -L 0 tty${CONTTY} &
 
 	' > /dev/tty${CONTTY}; \
 	echo "Started container ${CON}" || \
