@@ -63,12 +63,11 @@ do
 	mkdir -p /mnt/overlay/container_${CON}/sys
 	mkdir -p /mnt/overlay/container_${CON}/dev
 
-	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
+	mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 
 	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 
-		# echo "Installing busybox"
-		# /bin/busybox --install -s
+		/bin/busybox --install -s
 
 		echo "Mounting proc and sysfs"
 		mount -t proc none /proc || error proc
