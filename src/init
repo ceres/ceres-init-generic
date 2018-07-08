@@ -70,8 +70,7 @@ do
 done
 
 echo ""
-echo "This is the ceres-control console"
-echo ""
+echo "Welcome to the ceres-control console."
 
 hostname ceres-control
-while true; do getty -L 0 console; done
+while true; do chroot /mnt/squashfs getty -L 0 console; done
