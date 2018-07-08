@@ -67,8 +67,8 @@ do
 
 	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 
-		echo "Installing busybox"
-		/bin/busybox --install -s
+		# echo "Installing busybox"
+		# /bin/busybox --install -s
 
 		echo "Mounting proc and sysfs"
 		mount -t proc none /proc || error proc
