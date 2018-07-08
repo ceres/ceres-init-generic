@@ -50,14 +50,14 @@ mkdir -p /mnt/persist/fs_3
 for container in /mnt/persist/fs*;
 do
 	CON=$(echo ${container} | grep -Eo '[0-9]+$')
-	TTY=$((${CON}+1))
+	CONTTY=$((${CON}+1))
 	
 	mkdir -p /mnt/persist/work_${CON}
 	mkdir -p /mnt/overlay/container_${CON}
 	
 	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs_${CON},workdir=/mnt/persist/work_${CON} /mnt/overlay/container_${CON} || error overlay
 	
-	echo "Starting container ${CON} on tty${TTY}..."
+	echo "Starting container ${CON} on tty${CONTTY}..."
 	
 	mkdir -p /mnt/overlay/container_${CON}/proc
 	mkdir -p /mnt/overlay/container_${CON}/sys
@@ -80,8 +80,8 @@ do
 		echo "Setting hostname to ceres-c{$CON}"
 		hostname ceres-c${CON}
 		
-		echo "Starting getty on tty${TTY}"
-		getty -L 0 tty${TTY}
+		echo "Starting getty on tty${CONTTY}"
+		getty -L 0 tty${CONTTY}
 		
 	' > /dev/tty${TTY}; \
 	echo "Started container ${CON}" || \
