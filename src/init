@@ -55,8 +55,7 @@ do
 	mkdir -p ${container}_fs ${container}_work ${container}_overlay && \
 		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=${container}_fs,workdir=${container}_work overlay ${container}_overlay || error overlay
 	echo "Starting container ${CON} on tty${TTY}..."
-	ln /dev ${container}_overlay/dev
-	ln /sys ${container}_overlay/sys
+	mkdir ${container}_overlay/proc
 	/bin/busybox chroot ${container}_overlay /usr/bin/unshare -Cuinpfm --mount-proc sh -c '
 		/etc/init.d/rcS;
 		hostname ceres-c${CON};
