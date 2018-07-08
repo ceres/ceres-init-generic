@@ -42,11 +42,18 @@ mkdir -p /mnt/squashfs && \
 	mount -t squashfs -o ro /dev/sda2 /mnt/squashfs || error squashfs
 mkdir -p /mnt/persist && \
 	mount -t ext4 -o rw /dev/sda3 /mnt/persist || error persistent
-mkdir -p /mnt/persist/fs /mnt/persist/work /overlay && \
-	mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs,workdir=/mnt/persist/work overlay /overlay || error overlay
+	
+mkdir -p /mnt/persist/container_1
+mkdir -p /mnt/persist/container_2
+mkdir -p /mnt/persist/container_3
+	
+for container in /mnt/persist/container*;
+do
+	CON=$(echo ${container} | grep -Eo '[0-9]+$')
+	TTY=$((${CON}+1))
+	mkdir -p ${container}_fs ${container}_work ${container}_overlay && \
+		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=${container}_fs,workdir=${container}_work overlay ${container}_overlay || error overlay
+	/usr/bin/unshare -Cuinpfm /bin/busybox switch_root ${container}_overlay /sbin/init > /dev/tty${TTY}
+done
 
-umount /proc
-umount /sys
-umount /dev
-
-exec switch_root /overlay /sbin/init
+exec switch_root /overlay /sbin/getty 0 console
