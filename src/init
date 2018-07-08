@@ -67,13 +67,9 @@ do
 
 	cp /cinit /mnt/overlay/container_${CON}/init
 	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm /init > /dev/tty${CONTTY}; \
-		echo "Started container ${CON}" || \
+		echo "Started container ${CON} - press Alt-F${CONTTY} to access" || \
 		echo "Error starting containing ${CON}"; sh &
 done
-
-umount /proc
-umount /sys
-umount /dev
 
 hostname ceres-control
 exec switch_root /mnt/squashfs /bin/busybox sh
