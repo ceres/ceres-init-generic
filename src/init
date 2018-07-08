@@ -49,8 +49,8 @@ mkdir -p /mnt/persist/fs_3
 
 for container in /mnt/persist/fs*;
 do
-	CON=$(echo ${container} | grep -Eo '[0-9]+$')
-	CONTTY=$((${CON}+1))
+	export CON=$(echo ${container} | grep -Eo '[0-9]+$')
+	export CONTTY=$((${CON}+1))
 
 	mkdir -p /mnt/persist/work_${CON}
 	mkdir -p /mnt/overlay/container_${CON}
@@ -65,7 +65,7 @@ do
 
 	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 
-	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm CON=${CON} CONTTY=${CONTTY} sh -c '
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 
 		echo "Installing busybox"
 		/bin/busybox --install -s || error busybox
