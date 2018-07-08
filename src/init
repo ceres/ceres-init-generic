@@ -65,7 +65,7 @@ do
 	
 	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 	
-	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm CON=${CON} CONTTY=${CONTTY} sh -c '
 	
 		echo "Installing busybox"
 		/bin/busybox --install -s || error busybox
@@ -77,7 +77,7 @@ do
 		echo "Starting init.d tasks"
 		/etc/init.d/rcS || error init.d
 		
-		echo "Setting hostname to ceres-c{$CON}"
+		echo "Setting hostname to ceres-c${CON}"
 		hostname ceres-c${CON} || error hostname
 		
 		echo "Starting getty on tty${CONTTY}"
