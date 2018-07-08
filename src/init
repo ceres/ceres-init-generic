@@ -59,4 +59,4 @@ do
 	echo "Started container ${CON}"
 done
 
-exec switch_root /overlay /sbin/getty 0 console
+exec /sbin/getty 0 console
