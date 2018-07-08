@@ -58,13 +58,11 @@ do
 	/usr/bin/unshare -Cuinpfm \
 		/bin/busybox switch_root ${container}_overlay /etc/init.d/rcS; \
 		hostname ceres-c${CON}; \
-		while true; do 
-			getty -L 0 tty${TTY};
-		done \
+		/bin/busybox getty -L 0 tty${TTY}; \
 	> /dev/tty${TTY}; \
 	echo "Started container ${CON}" || \
 	echo "Error starting containing ${CON}"; sh &
 done
 
-hostname ceres-control
-while true; do getty -L 0 console; done
+/bin/busybox hostname ceres-control
+/bin/busybox getty -L 0 console
