@@ -49,6 +49,4 @@ umount /proc
 umount /sys
 umount /dev
 
-exec switch_root /overlay /sbin/init &
-	/usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty2 &
-	/usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty3 &
+exec switch_root /overlay /sbin/init
