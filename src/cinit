@@ -1,17 +1,16 @@
 #!/bin/sh
 
-echo "Installing busybox"
+/bin/busybox mount -t proc none /proc || echo "Error mounting /proc filesystem"
+/bin/busybox mount -t sysfs none /sys || echo "Error mounting /sys filesystem"
+
+export PATH=/sbin:/usr/sbin:/bin:/usr/bin:/opt/ceres/sbin
+
 /bin/busybox --install -s || error busybox
 
-echo "Mounting proc and sysfs"
-mount -t proc none /proc || error proc
-mount -t sysfs none /sys || error sys
-
-echo "Starting init.d tasks"
-/etc/init.d/rcS || error init.d
+/etc/init.d/rcS || echo "Error running init.d/rcS"
 
 echo "Setting hostname to ceres-c${CON}"
-hostname ceres-c${CON} || error hostname
+hostname ceres-c${CON}
 
 echo "Starting getty on tty${CONTTY}"
-getty -L 0 tty${CONTTY} &
+exec getty -L 0 tty${CONTTY} &
