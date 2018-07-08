@@ -52,20 +52,20 @@ do
 	CON=$(echo ${container} | grep -Eo '[0-9]+$')
 	TTY=$((${CON}+1))
 	
-	mkdir -p /mnt/work/container_${CON}
-	mkdir -p /mnt/overlay/container_${CON}
+	mkdir -p /mnt/work_container_${CON}
+	mkdir -p /mnt/overlay_container_${CON}
 	
-	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/container_${CON},workdir=/mnt/work/container_${CON} /mnt/overlay/container_${CON} || error overlay
+	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/container_${CON},workdir=/mnt/work_container_${CON} /mnt/overlay_container_${CON} || error overlay
 	
 	echo "Starting container ${CON} on tty${TTY}..."
 	
-	mkdir -p /mnt/overlay/container_${CON}/proc
-	mkdir -p /mnt/overlay/container_${CON}/sys
-	mkdir -p /mnt/overlay/container_${CON}/dev
+	mkdir -p /mnt/overlay_container_${CON}/proc
+	mkdir -p /mnt/overlay_container_${CON}/sys
+	mkdir -p /mnt/overlay_container_${CON}/dev
 	
-	mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
+	mount -o bind /dev /mnt/overlay_container_${CON}/dev || error dev
 	
-	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
+	/bin/busybox chroot /mnt/overlay_container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 		mount -t proc none /proc || error proc
 		mount -t sysfs none /sys || error sys
 		/etc/init.d/rcS;
