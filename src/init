@@ -45,13 +45,10 @@ mkdir -p /mnt/persist && \
 mkdir -p /mnt/persist/fs /mnt/persist/work /overlay && \
 	mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs,workdir=/mnt/persist/work overlay /overlay || error overlay
 
-/usr/bin/unshare -Cuinpfm /bin/busybox switch_root -c /dev/tty2 /overlay /sbin/init &
-/usr/bin/unshare -Cuinpfm /bin/busybox switch_root -c /dev/tty3 /overlay /sbin/init & 
-
-echo "    Instances started    "
-
 umount /proc
 umount /sys
 umount /dev
 
-exec switch_root /overlay /sbin/init
+exec switch_root /overlay /sbin/init &
+	/usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty2 &
+	/usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty3 &
