@@ -57,7 +57,7 @@ do
 
 	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs_${CON},workdir=/mnt/persist/work_${CON} /mnt/overlay/container_${CON} || error overlay
 
-	echo "Starting container ${CON} on tty${CONTTY}..."
+	echo "Starting container ${CON}, press Alt-F${CONTTY} to access"
 
 	mkdir -p /mnt/overlay/container_${CON}/proc
 	mkdir -p /mnt/overlay/container_${CON}/sys
@@ -66,9 +66,7 @@ do
 	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 
 	cp /cinit /mnt/overlay/container_${CON}/init
-	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm /init > /dev/tty${CONTTY}; \
-		echo "Started container ${CON} - press Alt-F${CONTTY} to access" || \
-		echo "Error starting containing ${CON}"; sh &
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm /init &
 done
 
 hostname ceres-control
