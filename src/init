@@ -69,5 +69,9 @@ do
 	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm /init > /dev/tty${CONTTY} &
 done
 
+echo ""
+echo "This is the ceres-control console"
+echo ""
+
 hostname ceres-control
-exec switch_root /mnt/squashfs /bin/busybox sh
+exec switch_root /mnt/squashfs sh -c 'while true; do getty -L 0 console; done'
