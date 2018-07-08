@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "Installing busybox"
+/bin/busybox --install -s || error busybox
+
+echo "Mounting proc and sysfs"
+mount -t proc none /proc || error proc
+mount -t sysfs none /sys || error sys
+
+echo "Starting init.d tasks"
+/etc/init.d/rcS || error init.d
+
+echo "Setting hostname to ceres-c${CON}"
+hostname ceres-c${CON} || error hostname
+
+echo "Starting getty on tty${CONTTY}"
+getty -L 0 tty${CONTTY} &
