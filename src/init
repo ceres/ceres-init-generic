@@ -73,12 +73,12 @@ do
 	cp /cinit /mnt/overlay/container${CON}/init
 	mkdir -p /var/namespaces/${CON}
 	/bin/busybox chroot /mnt/overlay/container${CON} /usr/bin/unshare \
-		--cgroup=/var/namespaces/${CON}/cgr \
+		--cgroup=/var/namespaces/${CON}/cgroup \
 		--uts=/var/namespaces/${CON}/uts \
 		--ipc=/var/namespaces/${CON}/ipc \
 		--net=/var/namespaces/${CON}/net \
 		--pid=/var/namespaces/${CON}/pid \
-		--mount -f /init > /dev/tty${CONTTY} &
+		--mount=/var/namespaces/${CON}/mount -f /init > /dev/tty${CONTTY} &
 done
 
 umount /proc
