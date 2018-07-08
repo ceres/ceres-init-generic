@@ -72,9 +72,7 @@ do
 
 	cp /cinit /mnt/overlay/container${CON}/init
 	mkdir -p /var/namespaces/${CON}
-	/bin/busybox chroot /mnt/overlay/container${CON} /usr/bin/unshare \
-		--net=/var/namespaces/${CON}/net \
-		-imCpu -f /init > /dev/tty${CONTTY} &
+	/bin/busybox chroot /mnt/overlay/container${CON} /usr/bin/unshare -nimCpu -f /init > /dev/tty${CONTTY} &
 done
 
 umount /proc
