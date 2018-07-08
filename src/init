@@ -43,7 +43,9 @@ mkdir -p /mnt/squashfs && \
 mkdir -p /mnt/persist && \
 	mount -t ext4 -o rw /dev/sda3 /mnt/persist || error persistent
 
-mkdir -p /overlay
+mkdir -p /mnt/work
+mkdir -p /mnt/overlay
+
 mkdir -p /mnt/persist/container_1
 mkdir -p /mnt/persist/container_2
 mkdir -p /mnt/persist/container_3
@@ -52,16 +54,17 @@ for container in /mnt/persist/container*;
 do
 	CON=$(echo ${container} | grep -Eo '[0-9]+$')
 	TTY=$((${CON}+1))
-	mkdir -p ${container}_fs ${container}_work ${container}_overlay && \
-		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=${container}_fs,workdir=${container}_work overlay ${container}_overlay || error overlay
+	mkdir -p /mnt/work/container_${CON} /mnt/overlay/container_${CON} && \
+		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/container_${CON},workdir=/mnt/work/container_${CON} overlay /mnt/overlay/container_${CON} || error overlay
 	echo "Starting container ${CON} on tty${TTY}..."
-	mkdir -p ${container}_overlay/proc ${container}_overlay/sys ${container}_overlay/dev
-	mount -o bind /dev ${container}_overlay/dev || error dev
-	/bin/busybox chroot ${container}_overlay /usr/bin/unshare -Cuinpfm sh -c '
+	mkdir -p /mnt/overlay/container_${CON}/proc /mnt/overlay/container_${CON}/sys /mnt/overlay/container_${CON}/dev
+	mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 		mount -t proc none /proc || error proc
 		mount -t sysfs none /sys || error sys
 		/etc/init.d/rcS;
 		hostname ceres-c${CON};
+		sh;
 		getty -L 0 tty${TTY};
 	' > /dev/tty${TTY}; \
 	echo "Started container ${CON}" || \
