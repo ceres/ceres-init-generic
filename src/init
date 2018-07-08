@@ -74,4 +74,4 @@ echo "This is the ceres-control console"
 echo ""
 
 hostname ceres-control
-exec switch_root /mnt/squashfs sh -c 'while true; do getty -L 0 console; done'
+exec switch_root /mnt/squashfs /bin/busybox sh -c 'while true; do getty -L 0 console; done'
