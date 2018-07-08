@@ -49,3 +49,9 @@ mkdir -p /mnt/persist/fs /mnt/persist/work /overlay && \
 /usr/bin/unshare -Cuinpfm /bin/busybox switch_root -c /dev/tty3 /overlay /sbin/init & 
 
 echo "    Instances started    "
+
+umount /proc
+umount /sys
+umount /dev
+
+exec switch_root /overlay /sbin/init
