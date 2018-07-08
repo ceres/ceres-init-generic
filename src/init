@@ -42,7 +42,8 @@ mkdir -p /mnt/squashfs && \
 	mount -t squashfs -o ro /dev/sda2 /mnt/squashfs || error squashfs
 mkdir -p /mnt/persist && \
 	mount -t ext4 -o rw /dev/sda3 /mnt/persist || error persistent
-	
+mkdir -p /overlay
+
 mkdir -p /mnt/persist/container_1
 mkdir -p /mnt/persist/container_2
 mkdir -p /mnt/persist/container_3
