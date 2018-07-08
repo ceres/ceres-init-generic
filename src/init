@@ -45,10 +45,6 @@ mkdir -p /mnt/persist && \
 mkdir -p /mnt/persist/fs /mnt/persist/work /overlay && \
 	mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs,workdir=/mnt/persist/work overlay /overlay || error overlay
 
-umount /proc
-umount /sys
-umount /dev
-
 exec switch_root /overlay /usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty2 &
 exec switch_root /overlay /usr/bin/unshare -Cuinpfm /sbin/init > /dev/tty3
 
