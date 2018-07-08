@@ -47,6 +47,10 @@ mkdir -p /overlay
 mkdir -p /mnt/persist/container_1
 mkdir -p /mnt/persist/container_2
 mkdir -p /mnt/persist/container_3
+
+umount /proc
+umount /sys
+umount /dev
 	
 for container in /mnt/persist/container*;
 do
@@ -55,7 +59,7 @@ do
 	mkdir -p ${container}_fs ${container}_work ${container}_overlay && \
 		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=${container}_fs,workdir=${container}_work overlay ${container}_overlay || error overlay
 	echo "Starting container ${CON} on tty${TTY}..."
-	mkdir ${container}_overlay/proc
+	mkdir -p ${container}_overlay/proc
 	/bin/busybox chroot ${container}_overlay /usr/bin/unshare -Cuinpfm --mount-proc sh -c '
 		/etc/init.d/rcS;
 		hostname ceres-c${CON};
@@ -66,4 +70,4 @@ do
 done
 
 hostname ceres-control
-getty -L 0 console || sh
+sh
