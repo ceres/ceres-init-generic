@@ -43,29 +43,29 @@ mkdir -p /mnt/squashfs && \
 mkdir -p /mnt/persist && \
 	mount -t ext4 -o rw /dev/sda3 /mnt/persist || error persistent
 
-mkdir -p /mnt/persist/container_1
-mkdir -p /mnt/persist/container_2
-mkdir -p /mnt/persist/container_3
+mkdir -p /mnt/persist/fs_1
+mkdir -p /mnt/persist/fs_2
+mkdir -p /mnt/persist/fs_3
 
-for container in /mnt/persist/container*;
+for container in /mnt/persist/fs*;
 do
 	CON=$(echo ${container} | grep -Eo '[0-9]+$')
 	TTY=$((${CON}+1))
 	
-	mkdir -p /mnt/work_container_${CON}
-	mkdir -p /mnt/overlay_container_${CON}
+	mkdir -p /mnt/persist/work_${CON}
+	mkdir -p /mnt/overlay/container_${CON}
 	
-	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/container_${CON},workdir=/mnt/work_container_${CON} /mnt/overlay_container_${CON} || error overlay
+	mount -t overlay overlay -o lowerdir=/mnt/squashfs,upperdir=/mnt/persist/fs_${CON},workdir=/mnt/persist/work_${CON} /mnt/overlay/container_${CON} || error overlay
 	
 	echo "Starting container ${CON} on tty${TTY}..."
 	
-	mkdir -p /mnt/overlay_container_${CON}/proc
-	mkdir -p /mnt/overlay_container_${CON}/sys
-	mkdir -p /mnt/overlay_container_${CON}/dev
+	mkdir -p /mnt/overlay/container_${CON}/proc
+	mkdir -p /mnt/overlay/container_${CON}/sys
+	mkdir -p /mnt/overlay/container_${CON}/dev
 	
-	mount -o bind /dev /mnt/overlay_container_${CON}/dev || error dev
+	mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 	
-	/bin/busybox chroot /mnt/overlay_container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
 		mount -t proc none /proc || error proc
 		mount -t sysfs none /sys || error sys
 		/etc/init.d/rcS;
