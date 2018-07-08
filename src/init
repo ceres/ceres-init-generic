@@ -70,7 +70,6 @@ do
 		mount -t sysfs none /sys || error sys
 		/etc/init.d/rcS;
 		hostname ceres-c${CON};
-		sh;
 		getty -L 0 tty${TTY};
 	' > /dev/tty${TTY}; \
 	echo "Started container ${CON}" || \
