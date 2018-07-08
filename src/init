@@ -55,16 +55,16 @@ do
 	mkdir -p ${container}_fs ${container}_work ${container}_overlay && \
 		mount -t overlay -o lowerdir=/mnt/squashfs,upperdir=${container}_fs,workdir=${container}_work overlay ${container}_overlay || error overlay
 	echo "Starting container ${CON} on tty${TTY}..."
-	/usr/bin/unshare -Cuinpfm /bin/busybox chroot ${container}_overlay \
-		mount -t proc none /proc; \
-		mount -t sysfs none /sys; \
-		mount -t devtmpfs none /dev; \
-		hostname container-${CON} \
-		/etc/init.d/rcS; \
-		getty 0 tty${TTY}; \
-	> /dev/tty${TTY} || sh &
-	echo "Started container ${CON}"
+	/usr/bin/unshare -Cuinpfm \
+		/bin/busybox switch_root ${container}_overlay /etc/init.d/rcS; \
+		hostname ceres-c${CON}; \
+		while true; do 
+			getty -L 0 tty${TTY};
+		done \
+	> /dev/tty${TTY}; \
+	echo "Started container ${CON}" || \
+	echo "Error starting containing ${CON}"; sh &
 done
 
-hostname control
-while true; do sh; done
+hostname ceres-control
+while true; do getty -L 0 console; done
