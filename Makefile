@@ -26,8 +26,10 @@ build:
 	cp -ar $(TARGET_DIR)/lib/libc.so $(BUILD_DIR)/lib/
 	cp -ar $(TARGET_DIR)/lib/*musl*.so* $(BUILD_DIR)/lib/
 	cp $(@D)/src/init $(BUILD_DIR)/init
+	cp $(@D)/src/cinit $(BUILD_DIR)/cinit
 
 	chmod +x $(BUILD_DIR)/init
+	chmod +x $(BUILD_DIR)/cinit
 	chmod +x $(BUILD_DIR)/bin/busybox
 	chmod -s $(BUILD_DIR)/bin/busybox
 
