@@ -63,27 +63,12 @@ do
 	mkdir -p /mnt/overlay/container_${CON}/sys
 	mkdir -p /mnt/overlay/container_${CON}/dev
 
-	mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
+	# mount -o bind /dev /mnt/overlay/container_${CON}/dev || error dev
 
-	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm sh -c '
-		/bin/busybox --install
-
-		echo "Mounting proc and sysfs"
-		mount -t proc none /proc || error proc
-		mount -t sysfs none /sys || error sys
-
-		echo "Starting init.d tasks"
-		#/etc/init.d/rcS || error init.d
-
-		echo "Setting hostname to ceres-c${CON}"
-		hostname ceres-c${CON} || error hostname
-
-		echo "Starting getty on tty${CONTTY}"
-		getty -L 0 tty${CONTTY} &
-
-	' > /dev/tty${CONTTY}; \
-	echo "Started container ${CON}" || \
-	echo "Error starting containing ${CON}"; sh &
+	cp /cinit /mnt/overlay/container_${CON}/init
+	/bin/busybox chroot /mnt/overlay/container_${CON} /usr/bin/unshare -Cuinpfm /init > /dev/tty${CONTTY}; \
+		echo "Started container ${CON}" || \
+		echo "Error starting containing ${CON}"; sh &
 done
 
 hostname ceres-control
