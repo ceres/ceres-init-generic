@@ -1,11 +1,11 @@
 #!/bin/sh
 
-/bin/busybox mount -t proc none /proc || echo "Error mounting /proc filesystem"
-/bin/busybox mount -t sysfs none /sys || echo "Error mounting /sys filesystem"
+/bin/busybox --install -s || echo "Error configuring busybox"
 
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin:/opt/ceres/sbin
 
-/bin/busybox --install -s || error busybox
+mount -t proc none /proc || echo "Error mounting /proc filesystem"
+mount -t sysfs none /sys || echo "Error mounting /sys filesystem"
 
 /etc/init.d/rcS || echo "Error running init.d/rcS"
 
