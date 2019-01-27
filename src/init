@@ -27,7 +27,7 @@ mount -t devtmpfs none /dev || error dev
 echo 0 > /proc/sys/kernel/printk
 clear
 
-ls /sys/class/net/eth* | xargs -I{} /bin/busybox ifconfig {} up 
+ls /sys/class/net/ | xargs -I{} /bin/busybox ifconfig {} up 2>/dev/null
 echo '{"AdminListen": "tcp://0.0.0.0:9001"}' | exec /bin/yggdrasil -useconf
 
 echo "                          "
