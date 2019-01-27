@@ -27,6 +27,8 @@ mount -t devtmpfs none /dev || error dev
 echo 0 > /proc/sys/kernel/printk
 clear
 
+/bin/yggdrasil -autoconf
+
 echo "                          "
 echo "   ___ ___ _ __ ___  ___  "
 echo "  / __/ _ \ '__/ _ \/ __| "
@@ -85,11 +87,6 @@ hostname ceres-control
 mount -o bind /dev /mnt/overlay/control/dev
 exec switch_root /mnt/overlay/control /bin/busybox sh -c '
 	mount -t proc none /proc
-        mount -t sysfs none /sys
- 	yggdrasil -autoconf || while true; do getty -L 0 console; done
+	mount -t sysfs none /sys
+	while true; do getty -L 0 console; done
 '
-#exec switch_root /mnt/overlay/control /bin/busybox sh -c '
-#	mount -t proc none /proc
-#	mount -t sysfs none /sys
-#	while true; do getty -L 0 console; done
-#'
