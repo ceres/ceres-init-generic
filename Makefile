@@ -33,6 +33,7 @@ build:
 	chmod +x $(BUILD_DIR)/cinit
 	chmod +x $(BUILD_DIR)/bin/busybox
 	chmod -s $(BUILD_DIR)/bin/busybox
+	chmod +x $(BUILD_DIR)/bin/yggdrasil
 
 	sudo mknod $(BUILD_DIR)/dev/console c 5 1 || true
 	sudo mknod $(BUILD_DIR)/dev/ram0 b 1 1 || true
