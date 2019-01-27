@@ -21,6 +21,7 @@ build:
 	mkdir -p $(BUILD_DIR)/usr/bin $(BUILD_DIR)/usr/sbin $(BUILD_DIR)/lib
 
 	cp -a $(TARGET_DIR)/bin/busybox $(BUILD_DIR)/bin/
+	cp -La ~/yggdrasil-go/yggdrasil* $(BUILD_DIR)/bin/
 	cp -La $(TARGET_DIR)/usr/bin/unshare $(BUILD_DIR)/usr/bin/
 	cp -La $(TARGET_DIR)/usr/bin/nsenter $(BUILD_DIR)/usr/bin/
 	cp -ar $(TARGET_DIR)/lib/libc.so $(BUILD_DIR)/lib/
